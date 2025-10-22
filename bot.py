@@ -24,7 +24,6 @@ logger = logging.getLogger(__name__)
 # --------------------------
 TOKEN = "8321988283:AAHaMPgWW68Ktmek1WAdTeZjeLMJquT0IUk"
 SPREADSHEET_ID = "1lJc616p6Mx0QBAXexmBJxYX9cte8cSBANJQNaR2V12w"
-SERVICE_ACCOUNT_FILE = "teak-alloy-475620-q5-75d9468a5b71.json"
 ADMIN_CHAT_ID = 460841825  # <- твій chat_id
 
 # --------------------------
@@ -32,7 +31,10 @@ scope = [
     "https://spreadsheets.google.com/feeds",
     "https://www.googleapis.com/auth/drive",
 ]
-credentials = ServiceAccountCredentials.from_json_keyfile_name(SERVICE_ACCOUNT_FILE, scope)
+import json, os
+credentials_info = json.loads(os.getenv("GOOGLE_CREDENTIALS"))
+credentials = ServiceAccountCredentials.from_json_keyfile_dict(credentials_info, scope)
+
 gc = gspread.authorize(credentials)
 SPREADSHEET = gc.open_by_key(SPREADSHEET_ID)
 
@@ -300,3 +302,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
