@@ -22,7 +22,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # --------------------------
-TOKEN = "8321988283:AAHaMPgWW68Ktmek1WAdTeZjeLMJquT0IUk"
+TOKEN = "8321988283:AAGjmdxmOoOixeYFLNUUtZ1XfknOuGklX1U"
 SPREADSHEET_ID = "1lJc616p6Mx0QBAXexmBJxYX9cte8cSBANJQNaR2V12w"
 ADMIN_CHAT_ID = 460841825  # <- твій chat_id
 
@@ -302,4 +302,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
