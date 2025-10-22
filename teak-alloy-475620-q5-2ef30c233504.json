@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "teak-alloy-475620-q5",
+  "private_key_id": "2ef30c2335041b70e687502f522ad3e5db2c2b6d",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDar4+R8s6tcWsC\n1cSdYdxI66np9EFHtF0vKBB7hQTwq7TiyuWWP4GqMKIfAb929s0fCdVUIqfqL62F\nkbAOjB5Z5GYL3YqzAFpTl6FeDRdCFDT6l1gGOAoM7s3kl4ijxDQUYT4XhVsUc7zp\nIhN0JMYcnVk5BpuGzRFzOP+N247nlKfZl5ZPbpvRxULEaSt5r1Ytpo8qrWgJgYxv\nSwfSzvKwh9dn29y38Xys/qnCTHfCDkGXAI+owgE485T0BYX3qAzfJzJWihOuecTZ\nBLQz12s8+o+jLqcAKdhgJRULcOZFzId3RJ0AiBFvS25ROir9kVaCIB/Yg2dUIgIu\nFVAY1EZvAgMBAAECggEAJS3P1NpY9PfhX5wET1WB5Avc2V+jcZNifE/tbXKSAnDO\n0ff4zHCDlPGrvmXHrWwMN4iuch1qOtBcSecY7YA48MN57e5+VCxtLuUKlDjZiWxy\nDWCJoJUKcGRxMLnqix0iVYyqx8juUS3UIjae5BIUdGzz7FQJQQPAQbyhBfcb9pbo\n2idLTNBULhgxHyOlHKdri7dW9xJQtGtRQXTeWuLPNe5eSnDO+f+CkKy06ky/nIhc\n4c8umqjNCgyTVcwPr9gVU2YWwpOUaPesiPFCiY6DtIgQCU3BTAXgVzZJ+81zvaXP\npS5QidURRe75toDJPhO/jsGHizIx5ssSVdX7lOUPkQKBgQD5WHYnIhBqzF5OKWMK\nBpdths58oTxbE1fjyA2KAU2F6JJokEQwdgAuxMuPeRSotZEY5ArJ4sl9gzw+vig0\nT/1sa5tXDDA/6qb8Dmhf+HNISMNBAm3JOIyJkH9Z2oGN5xxzznpuadbIU4eancgP\n0OH4RvgYoeOx+jvrtrwZIh2v2wKBgQDghaFsgm8gAlCYQcReAf4f/4L0A9/8CMXb\npHrvGKiqelrj9LNxAbCuuWQY4mJ0WwWay2e5gfmf0CXGL/8bENtDaPHd8Lx2ynwJ\ntTOdpRpmbw0/bquTni8+bVdPJ8Horj3PTjgDqnYHGRgQyJKCIjspybiiDkimTVTa\nSzoeUCrh/QKBgQCoRqgujtGvkc8PRuUdDgfCFhliiNoXyP0mr4tbmLd96NBuGva6\nEdjbt1p9sERd+3M57iTNzO0YdKoC2gh+DYHFWvXSEFq7uBwLvZl5M05x+RE03XPE\nOhK2gDtCI7INV2yfRzjfLTSTq7O3iEZNTjZCfXrP/OmS4oLv+DoHaDvKwwKBgDgp\n9Wl5b2bobVTJDuAdS36hohZ8aalYYHZDPOVWm8qZdOcVLVYVgCcVBS8cYliM9Gf2\nfenv04vgu7JKC1yv6MmCFQ7Zy6tDl6euBk1nIaWCHiRCAPWaWmMZYv/QCDe2bovP\nGz//girgYh7ArbWT7ozTgzY2sIG5UoKQ0ucGUtPZAoGBAJ19iF6CTzATz7c7KkhP\n1l0FR+F+SVTdKvTuhKbumVubfBijipMDReVL4VVw3kRY3ySdPA9JPfSkA0+Ush6Q\noo8af88eIlLYKt9CWuYLvgm1NQYCunXWv1j0fDLUqqUzInZCGtM4Dav6rLuxvpa3\nSr6KvjwrMg/cRCo1jKIyLQX8\n-----END PRIVATE KEY-----\n",
+  "client_email": "telegram-bot-service@teak-alloy-475620-q5.iam.gserviceaccount.com",
+  "client_id": "100308014168650583907",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/telegram-bot-service%40teak-alloy-475620-q5.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
