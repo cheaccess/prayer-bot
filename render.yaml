@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: prayer-bot
+    env: python
+    region: frankfurt  # можеш змінити на nearer region
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python bot.py"
+    envVars:
+      - key: TOKEN
+        value: "8321988283:AAGjmdxmOoOixeYFLNUUtZ1XfknOuGklX1U"
+      - key: GOOGLE_CREDENTIALS
+        sync: false  # значення вводимо вручну у Render Dashboard
+      - key: SPREADSHEET_ID
+        value: "1lJc616p6Mx0QBAXexmBJxYX9cte8cSBANJQNaR2V12w"
