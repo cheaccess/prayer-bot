@@ -1,4 +1,4 @@
-# bot.py — повний робочий код з WEBHOOK для Render
+# bot.py — повний робочий код з Flask + Webhook для Render
 import logging
 import os
 import json
@@ -12,8 +12,8 @@ from telegram.ext import (
     CommandHandler,
     CallbackQueryHandler,
     MessageHandler,
-    filters,
     ContextTypes,
+    filters,
 )
 
 import gspread
@@ -27,14 +27,14 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # --------------------------
-TOKEN = os.getenv("BOT_TOKEN")
+TOKEN = os.getenv("BOT_TOKEN") or "PUT_TOKEN_HERE"
 SPREADSHEET_ID = "1lJc616p6Mx0QBAXexmBJxYX9cte8cSBANJQNaR2V12w"
 ADMIN_CHAT_ID = 460841825
 
-WEBHOOK_PATH = "/webhook"
-WEBHOOK_SECRET = TOKEN  # достатньо
+WEBHOOK_PATH = f"/webhook/{TOKEN}"
 
 # --------------------------
+# Google Sheets
 scope = [
     "https://spreadsheets.google.com/feeds",
     "https://www.googleapis.com/auth/drive",
@@ -51,6 +51,7 @@ try:
 except Exception:
     SHEET_OTHERS = SPREADSHEET.add_worksheet(title="Молитва за інших", rows="100", cols="10")
     SHEET_OTHERS.append_row(["Дата", "Ім'я", "Молитва", "Періодичність", "Телефон"])
+
 try:
     SHEET_KVL = SPREADSHEET.get_worksheet(2)
 except Exception:
@@ -80,9 +81,72 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_markup=main_keyboard(),
     )
 
-# === УСЯ ТВОЯ ЛОГІКА ДАЛІ — БЕЗ ЗМІН ===
-# (periodicity_handler, menu_handler, message_handler)
-# 👉 СЮДИ ВСТАВ ТОЧНО ТІ САМІ ФУНКЦІЇ З ТВОГО КОДУ 👈
+# --------------------------
+async def periodicity_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+    mapping = {"daily": "Щодня", "weekly": "Щотижня", "monthly": "Щомісяця"}
+    context.user_data["periodicity"] = mapping.get(query.data)
+    context.user_data["step_others"] = 4
+    await query.message.reply_text(
+        "Дякуємо! 🙏\nЯкщо бажаєте, залиште свій номер телефону для зв’язку (або напишіть «–», щоб пропустити):"
+    )
+
+# --------------------------
+async def menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+    data = query.data
+
+    if data == "pray_request":
+        context.user_data.clear()
+        context.user_data["step"] = 1
+        await query.message.reply_text(
+            "Введіть ім'я (за бажанням прізвище) людини, за яку Ви просите помолитись у намірі: ЗА ЗВІЛЬНЕННЯ ІЗ ЗАЛЕЖНОСТІ",
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🔙 На початок", callback_data="back_to_start")]]),
+        )
+        return
+
+    if data == "pray_for_others":
+        context.user_data.clear()
+        context.user_data["step_others"] = 1
+        await query.message.reply_text(
+            "Введіть, будь ласка, своє ім'я та прізвище 🙏\n(Ви можете написати тільки ім’я, якщо бажаєте)",
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🔙 На початок", callback_data="back_to_start")]]),
+        )
+        return
+
+    if data == "crusade":
+        await query.message.reply_text(
+            "🛡️Що таке Круціята Визволення Людини?\n\n"
+            "КВЛ - це програма дій, метою якої є подолання всього, що загрожує гідності особи...\n\n"
+            "Додатково:\n"
+            "🔹 Facebook: https://www.facebook.com/groups/253007735269596/\n"
+            "🔹 Сайт Руху Світло-Життя: https://oazaukraina.blogspot.com/2010/10/blog-post_5048.html\n"
+            "🔹 Вікіпедія: https://uk.wikipedia.org/wiki/Круціята_визволення_людини\n\n",
+            reply_markup=InlineKeyboardMarkup(
+                [
+                    [InlineKeyboardButton("Виявляю бажання приєднатись до КВЛ", callback_data="join_kvl")],
+                    [InlineKeyboardButton("🔙 На початок", callback_data="back_to_start")],
+                ]
+            ),
+        )
+        return
+
+    if data == "back_to_start":
+        context.user_data.clear()
+        await query.message.reply_text("Головне меню:", reply_markup=main_keyboard())
+
+# --------------------------
+async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    text = update.message.text.strip()
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    if context.user_data.get("step") == 1:
+        SHEET_PRAYER.append_row([timestamp, text])
+        await update.message.reply_text("Дякуємо! 🙏", reply_markup=main_keyboard())
+        context.user_data.clear()
+        return
 
 # --------------------------
 def create_app():
@@ -95,13 +159,11 @@ def create_app():
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
 
     @flask_app.route("/")
-    def index():
-        return "Bot is running (webhook) ✅"
+    def home():
+        return "Bot is running ✅"
 
     @flask_app.route(WEBHOOK_PATH, methods=["POST"])
     async def webhook():
-        if request.headers.get("X-Telegram-Bot-Api-Secret-Token") != WEBHOOK_SECRET:
-            return "Unauthorized", 403
         update = Update.de_json(request.get_json(force=True), application.bot)
         await application.process_update(update)
         return "OK"
@@ -112,11 +174,9 @@ def create_app():
 if __name__ == "__main__":
     flask_app, application = create_app()
 
-    port = int(os.environ.get("PORT", 10000))
-    application.bot.initialize()
-    application.bot.set_webhook(
-        url=os.environ["RENDER_EXTERNAL_URL"] + WEBHOOK_PATH,
-        secret_token=WEBHOOK_SECRET,
+    application.run_webhook(
+        listen="0.0.0.0",
+        port=int(os.environ.get("PORT", 10000)),
+        url_path=WEBHOOK_PATH,
+        webhook_url=os.getenv("RENDER_EXTERNAL_URL") + WEBHOOK_PATH,
     )
-
-    flask_app.run(host="0.0.0.0", port=port)
